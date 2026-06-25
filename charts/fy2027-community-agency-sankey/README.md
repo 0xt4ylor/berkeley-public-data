@@ -10,7 +10,7 @@ Source PDF: https://berkeleyca.gov/sites/default/files/2026-06/Supp%203%20Packet
 
 ## Data
 
-The extracted data is in `data.csv`.
+The extracted canonical data is in `../../data/fy2027-community-agency-allocations.csv`.
 
 Total visualized allocation: $21,460,545.
 
