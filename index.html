@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Berkeley Public Data</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f7f4;
+      --text: #1f2933;
+      --muted: #5f6b76;
+      --border: #d9ded8;
+      --link: #165a72;
+      --link-hover: #0e4052;
+      --panel: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    main {
+      width: min(920px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 64px 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.25rem, 8vw, 4.5rem);
+      line-height: 1;
+      font-weight: 750;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 640px;
+      margin: 18px 0 44px;
+      font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+      color: var(--muted);
+    }
+
+    section {
+      border-top: 1px solid var(--border);
+      padding-top: 28px;
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: 1rem;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0;
+    }
+
+    a.visualization {
+      display: block;
+      padding: 20px 22px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--link);
+      background: var(--panel);
+      text-decoration: none;
+      font-size: 1.125rem;
+      font-weight: 650;
+    }
+
+    a.visualization:hover,
+    a.visualization:focus {
+      color: var(--link-hover);
+      border-color: var(--link);
+      outline: none;
+    }
+
+    @media (max-width: 560px) {
+      main {
+        width: min(100% - 24px, 920px);
+        padding: 40px 0;
+      }
+
+      a.visualization {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Berkeley Public Data</h1>
+    <p class="subtitle">Public data and civic visualizations for Berkeley, California.</p>
+
+    <section aria-labelledby="visualizations-heading">
+      <h2 id="visualizations-heading">Visualizations</h2>
+      <a class="visualization" href="./charts/fy2027-community-agency-sankey/">
+        FY2027 Community Agency Allocations Sankey
+      </a>
+    </section>
+  </main>
+</body>
+</html>
