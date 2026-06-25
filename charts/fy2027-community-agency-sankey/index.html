@@ -1,0 +1,195 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Berkeley FY2027 Community Agency Allocations Sankey</title>
+<script src="https://cdn.plot.ly/plotly-3.3.1.min.js" integrity="sha256-4rD3fugVb/nVJYUv5Ky3v+fYXoouHaBSP20WIJuEiWg=" crossorigin="anonymous"></script>
+<style>
+  :root { --panel-width: clamp(300px, 24vw, 420px); --page-pad: clamp(12px, 2vw, 24px); }
+  * { box-sizing: border-box; }
+  body { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, Helvetica, sans-serif; margin: 0; background: #fff; color: #111; }
+  #wrap {
+    width: 100%;
+    max-width: 1900px;
+    margin: 0 auto;
+    padding: 0 var(--page-pad) 12px;
+    display: grid;
+    grid-template-columns: minmax(820px, 1fr) var(--panel-width);
+    column-gap: clamp(16px, 2vw, 32px);
+    align-items: start;
+  }
+  #chart { width: 100%; height: 1120px; min-width: 0; }
+  #info {
+    position: sticky;
+    top: 16px;
+    margin-top: 94px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 14px 16px;
+    background: rgba(255,255,255,.98);
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    font-size: 13px;
+    line-height: 1.35;
+    max-height: calc(100vh - 32px);
+    overflow: auto;
+  }
+  #info h2 { margin: 0 0 8px; font-size: clamp(16px, 1.35vw, 24px); line-height: 1.2; overflow-wrap: anywhere; }
+  #info .total { font-size: clamp(20px, 2.2vw, 34px); font-weight: 700; margin: 8px 0 10px; }
+  #info .type { color: #555; margin-bottom: 4px; }
+  #info ul { padding-left: 18px; max-height: 650px; overflow: auto; margin: 8px 0 0; }
+  #info li { margin-bottom: 5px; }
+  .catbtn { border: 0; background: transparent; padding: 0; text-decoration: underline; cursor: pointer; font: inherit; color: #1f5aa6; text-align: left; }
+  .hint { color: #666; font-size: 12px; margin-top: 6px; }
+  #sourcebar {
+    grid-column: 1 / -1;
+    align-self: end;
+    justify-self: start;
+    max-width: min(980px, 100%);
+    color: #555;
+    font-size: 12px;
+    line-height: 1.35;
+    background: rgba(255,255,255,.94);
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #e5e5e5;
+  }
+  #sourcebar a { color: #1f5aa6; text-decoration: underline; }
+  #sourcebar strong { color: #333; }
+  @media (max-width: 1150px) {
+    #wrap { grid-template-columns: 1fr; }
+    #chart { min-width: 900px; }
+    #info { position: static; margin-top: 12px; max-height: none; }
+    #sourcebar { margin-top: 12px; }
+    body { overflow-x: auto; }
+  }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="chart"></div>
+  <aside id="info">
+    <h2>Category totals</h2>
+    <div class="hint">Hover a node or flow, or click a category, to show details here, including percent of category total.</div>
+    <ul><li><button class="catbtn" data-label="Homeless Services">Homeless Services</button> <span>$12,042,144</span></li><li><button class="catbtn" data-label="Disability Programs">Disability Programs</button> <span>$1,944,880</span></li><li><button class="catbtn" data-label="Health">Health</button> <span>$1,209,690</span></li><li><button class="catbtn" data-label="Youth">Youth</button> <span>$1,150,337</span></li><li><button class="catbtn" data-label="Community Facilities Improvements">Community Facilities Improvements</button> <span>$1,147,698</span></li><li><button class="catbtn" data-label="Legal/Advocacy">Legal/Advocacy</button> <span>$955,695</span></li><li><button class="catbtn" data-label="Arts">Arts</button> <span>$742,471</span></li><li><button class="catbtn" data-label="Economic Development">Economic Development</button> <span>$740,277</span></li><li><button class="catbtn" data-label="Childcare">Childcare</button> <span>$485,956</span></li><li><button class="catbtn" data-label="Housing Development & Rehabilitation">Housing Development & Rehabilitation</button> <span>$330,964</span></li><li><button class="catbtn" data-label="Employment Training">Employment Training</button> <span>$303,851</span></li><li><button class="catbtn" data-label="Community Media">Community Media</button> <span>$284,710</span></li><li><button class="catbtn" data-label="Other">Other</button> <span>$44,720</span></li><li><button class="catbtn" data-label="Seniors">Seniors</button> <span>$30,000</span></li><li><button class="catbtn" data-label="Housing">Housing</button> <span>$28,578</span></li><li><button class="catbtn" data-label="Recreation">Recreation</button> <span>$18,574</span></li></ul>
+  </aside>
+  <div id="sourcebar">
+    <strong>Source:</strong> City of Berkeley, Supplemental Packet, June 23, 2026, Adoption of FY27-FY28 Budget and FY27-FY31 CIP, FY2027 Community Agency List.
+    <a href="https://berkeleyca.gov/sites/default/files/2026-06/Supp%203%20Packet%20-%206.23.26%20%231%20Adoption%20of%20FY%2027-FY28%20%26%20FY27-FY31%20CIP-Rev%20Agenda%20Material%20Cover.pdf" target="_blank" rel="noopener noreferrer">[ pdf ]</a>
+    Amounts shown are FY27 allocations in USD. Total visualized: $21,460,545.
+  </div>
+</div>
+<script>
+const data = [{"type": "sankey", "arrangement": "snap", "node": {"pad": 12, "thickness": 14, "line": {"color": "rgba(0,0,0,0.35)", "width": 0.5}, "label": ["CDBG*", "CSBG*", "ESG*", "GF Measure P", "GF Measure U1", "General Fund (GF)", "HOME*", "HOME-ARP", "MHSA", "Other funds", "PLHA", "Arts", "Childcare", "Community Facilities Improvements", "Community Media", "Disability Programs", "Economic Development", "Employment Training", "Health", "Homeless Services", "Housing", "Housing Development & Rehabilitation", "Legal/Advocacy", "Other", "Recreation", "Seniors", "Youth", "Alameda County Homeless Action Center", "BANANAS Incorporated", "Bay Area Community Land Trust", "Bay Area Community Services", "Bay Area Hispano Institute for Advancement", "Bay Area Outreach and Recreation Program", "Berkeley Art Center", "Berkeley Community Gardening Collaborative", "Berkeley Community Media", "Berkeley Community Scholars", "Berkeley Convention and Visitors Bureau", "Berkeley Film Foundation", "Berkeley Juneteenth", "Berkeley Public Schools Fund", "Berkeley Unified School District", "Berkeley Youth Alternatives", "Big Oaks Learning Center Inc", "Big Oaks Learning Center Inc.", "Biotech Partners", "Bread Project", "Building Opportunities for Self Sufficiency", "CHDO Programs", "Center for Independent Living", "Civic Arts Grants - Arts Orgs and Individual Artist", "Civic Arts Grants - Festivals", "Community Agency Publishing Outcomes Project", "Dorothy Day", "East Bay Community Law Center", "Easy Does It", "Eden Council for Hope and Opportunity", "Eviction Defense Center", "Family Violence Law Center", "HHCS Public Facility Improvements NOFA", "HMIS Support", "Healthy Black Families", "Healthy Black Families, Inc.", "Insight Housing", "Inter-City Services", "J-Sei", "Larkin Street Youth Services", "Lifelong Medical Care", "Multicultural Institute", "Nia House Learning Center", "Peer Wellness Collective", "RISE Program", "Rebuilding Together East Bay - North", "Rebuilding Together East Bay- North", "Stiles Hall", "Sugar - Sweetened Beverage Panel (POE)**", "Telegraph Business Improvement District", "Through the Looking Glass", "UC Berkeley", "UC Theater Concert Career Pathways Program", "Women's Daytime Drop-In Center"], "customdata": ["Funding source<br>Total: $1,813,219", "Funding source<br>Total: $160,000", "Funding source<br>Total: $210,808", "Funding source<br>Total: $6,969,263", "Funding source<br>Total: $1,156,137", "Funding source<br>Total: $8,020,284", "Funding source<br>Total: $28,578", "Funding source<br>Total: $547,139", "Funding source<br>Total: $20,000", "Funding source<br>Total: $2,025,270", "Funding source<br>Total: $509,847", "Category<br>Total: $742,471", "Category<br>Total: $485,956", "Category<br>Total: $1,147,698", "Category<br>Total: $284,710", "Category<br>Total: $1,944,880", "Category<br>Total: $740,277", "Category<br>Total: $303,851", "Category<br>Total: $1,209,690", "Category<br>Total: $12,042,144", "Category<br>Total: $28,578", "Category<br>Total: $330,964", "Category<br>Total: $955,695", "Category<br>Total: $44,720", "Category<br>Total: $18,574", "Category<br>Total: $30,000", "Category<br>Total: $1,150,337", "Agency<br>Total: $129,539", "Agency<br>Total: $93,333", "Agency<br>Total: $5,200", "Agency<br>Total: $4,088,131", "Agency<br>Total: $186,541", "Agency<br>Total: $50,592", "Agency<br>Total: $77,987", "Agency<br>Total: $19,720", "Agency<br>Total: $284,710", "Agency<br>Total: $35,000", "Agency<br>Total: $740,277", "Agency<br>Total: $22,500", "Agency<br>Total: $4,500", "Agency<br>Total: $25,300", "Agency<br>Total: $586,974", "Agency<br>Total: $60,000", "Agency<br>Total: $121,197", "Agency<br>Total: $39,840", "Agency<br>Total: $150,000", "Agency<br>Total: $70,000", "Agency<br>Total: $1,334,724", "Agency<br>Total: $28,578", "Agency<br>Total: $211,600", "Agency<br>Total: $450,000", "Agency<br>Total: $142,484", "Agency<br>Total: $25,000", "Agency<br>Total: $2,677,818", "Agency<br>Total: $48,556", "Agency<br>Total: $1,859,288", "Agency<br>Total: $35,000", "Agency<br>Total: $797,139", "Agency<br>Total: $75,000", "Agency<br>Total: $1,053,918", "Agency<br>Total: $6,676", "Agency<br>Total: $150,000", "Agency<br>Total: $90,000", "Agency<br>Total: $2,415,102", "Agency<br>Total: $101,351", "Agency<br>Total: $30,000", "Agency<br>Total: $189,255", "Agency<br>Total: $1,157,071", "Agency<br>Total: $132,500", "Agency<br>Total: $100,000", "Agency<br>Total: $32,016", "Agency<br>Total: $229,328", "Agency<br>Total: $114,164", "Agency<br>Total: $93,780", "Agency<br>Total: $100,000", "Agency<br>Total: $452,646", "Agency<br>Total: $49,139", "Agency<br>Total: $35,000", "Agency<br>Total: $140,000", "Agency<br>Total: $45,000", "Agency<br>Total: $267,071"], "hovertemplate": "%{label}<br>%{customdata}<extra></extra>"}, "link": {"source": [0, 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 7, 7, 8, 9, 9, 10, 11, 11, 11, 11, 11, 11, 12, 12, 12, 12, 12, 13, 13, 14, 15, 15, 15, 16, 17, 17, 17, 17, 18, 18, 18, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 20, 21, 21, 21, 22, 22, 22, 22, 23, 23, 24, 25, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26], "target": [13, 19, 21, 22, 18, 19, 19, 19, 22, 11, 12, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 20, 19, 22, 19, 12, 15, 19, 33, 38, 39, 50, 51, 79, 28, 31, 43, 62, 69, 59, 73, 35, 32, 55, 77, 37, 28, 46, 64, 68, 41, 67, 75, 27, 30, 47, 53, 60, 63, 66, 67, 70, 76, 80, 48, 29, 49, 72, 54, 56, 57, 58, 34, 52, 43, 65, 31, 36, 40, 41, 42, 44, 45, 61, 68, 71, 74, 78], "value": [1147698, 418921, 211600, 35000, 160000, 210808, 6969263, 906137, 250000, 742471, 319974, 284710, 85592, 740277, 303851, 1049690, 2807168, 119364, 323556, 44720, 18574, 30000, 1150337, 28578, 200000, 347139, 20000, 165982, 1859288, 509847, 77987, 22500, 4500, 450000, 142484, 45000, 43333, 150000, 102623, 90000, 100000, 1053918, 93780, 284710, 50592, 1859288, 35000, 740277, 50000, 70000, 101351, 82500, 452646, 304398, 452646, 129539, 4088131, 1334724, 2677818, 6676, 2415102, 189255, 852673, 32016, 49139, 267071, 28578, 5200, 211600, 114164, 48556, 35000, 797139, 75000, 19720, 25000, 18574, 30000, 36541, 35000, 25300, 134328, 60000, 39840, 150000, 150000, 50000, 229328, 100000, 140000], "customdata": ["$1,147,698", "$418,921", "$211,600", "$35,000", "$160,000", "$210,808", "$6,969,263", "$906,137", "$250,000", "$742,471", "$319,974", "$284,710", "$85,592", "$740,277", "$303,851", "$1,049,690", "$2,807,168", "$119,364", "$323,556", "$44,720", "$18,574", "$30,000", "$1,150,337", "$28,578", "$200,000", "$347,139", "$20,000", "$165,982", "$1,859,288", "$509,847", "$77,987", "$22,500", "$4,500", "$450,000", "$142,484", "$45,000", "$43,333", "$150,000", "$102,623", "$90,000", "$100,000", "$1,053,918", "$93,780", "$284,710", "$50,592", "$1,859,288", "$35,000", "$740,277", "$50,000", "$70,000", "$101,351", "$82,500", "$452,646", "$304,398", "$452,646", "$129,539", "$4,088,131", "$1,334,724", "$2,677,818", "$6,676", "$2,415,102", "$189,255", "$852,673", "$32,016", "$49,139", "$267,071", "$28,578", "$5,200", "$211,600", "$114,164", "$48,556", "$35,000", "$797,139", "$75,000", "$19,720", "$25,000", "$18,574", "$30,000", "$36,541", "$35,000", "$25,300", "$134,328", "$60,000", "$39,840", "$150,000", "$150,000", "$50,000", "$229,328", "$100,000", "$140,000"], "hovertemplate": "%{source.label} \u2192 %{target.label}<br>%{customdata}<extra></extra>"}}];
+const layout = {"title": {"text": "<span style='font-size:26px;font-weight:700;letter-spacing:-0.02em;color:#111'>Berkeley FY2027 Community Agency Allocations</span><br><span style='font-size:13px;font-weight:400;color:#5f6368'>Funding source → category → agency · Total $21,460,545 · Hover or click nodes or flows for details and category share</span>", "x": 0.02, "xanchor": "left", "font": {"family": "Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Arial, sans-serif", "size": 26, "color": "#111"}}, "font": {"family": "Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Arial, sans-serif", "size": 11, "color": "#333"}, "margin": {"l": 20, "r": 20, "t": 92, "b": 30}, "autosize": true, "height": 1120};
+const config = {"responsive": true};
+const nodeMeta = [{"label": "CDBG*", "type": "Funding source", "total": 1813219, "formatted": "$1,813,219"}, {"label": "CSBG*", "type": "Funding source", "total": 160000, "formatted": "$160,000"}, {"label": "ESG*", "type": "Funding source", "total": 210808, "formatted": "$210,808"}, {"label": "GF Measure P", "type": "Funding source", "total": 6969263, "formatted": "$6,969,263"}, {"label": "GF Measure U1", "type": "Funding source", "total": 1156137, "formatted": "$1,156,137"}, {"label": "General Fund (GF)", "type": "Funding source", "total": 8020284, "formatted": "$8,020,284"}, {"label": "HOME*", "type": "Funding source", "total": 28578, "formatted": "$28,578"}, {"label": "HOME-ARP", "type": "Funding source", "total": 547139, "formatted": "$547,139"}, {"label": "MHSA", "type": "Funding source", "total": 20000, "formatted": "$20,000"}, {"label": "Other funds", "type": "Funding source", "total": 2025270, "formatted": "$2,025,270"}, {"label": "PLHA", "type": "Funding source", "total": 509847, "formatted": "$509,847"}, {"label": "Arts", "type": "Category", "total": 742471, "formatted": "$742,471"}, {"label": "Childcare", "type": "Category", "total": 485956, "formatted": "$485,956"}, {"label": "Community Facilities Improvements", "type": "Category", "total": 1147698, "formatted": "$1,147,698"}, {"label": "Community Media", "type": "Category", "total": 284710, "formatted": "$284,710"}, {"label": "Disability Programs", "type": "Category", "total": 1944880, "formatted": "$1,944,880"}, {"label": "Economic Development", "type": "Category", "total": 740277, "formatted": "$740,277"}, {"label": "Employment Training", "type": "Category", "total": 303851, "formatted": "$303,851"}, {"label": "Health", "type": "Category", "total": 1209690, "formatted": "$1,209,690"}, {"label": "Homeless Services", "type": "Category", "total": 12042144, "formatted": "$12,042,144"}, {"label": "Housing", "type": "Category", "total": 28578, "formatted": "$28,578"}, {"label": "Housing Development & Rehabilitation", "type": "Category", "total": 330964, "formatted": "$330,964"}, {"label": "Legal/Advocacy", "type": "Category", "total": 955695, "formatted": "$955,695"}, {"label": "Other", "type": "Category", "total": 44720, "formatted": "$44,720"}, {"label": "Recreation", "type": "Category", "total": 18574, "formatted": "$18,574"}, {"label": "Seniors", "type": "Category", "total": 30000, "formatted": "$30,000"}, {"label": "Youth", "type": "Category", "total": 1150337, "formatted": "$1,150,337"}, {"label": "Alameda County Homeless Action Center", "type": "Agency", "total": 129539, "formatted": "$129,539"}, {"label": "BANANAS Incorporated", "type": "Agency", "total": 93333, "formatted": "$93,333"}, {"label": "Bay Area Community Land Trust", "type": "Agency", "total": 5200, "formatted": "$5,200"}, {"label": "Bay Area Community Services", "type": "Agency", "total": 4088131, "formatted": "$4,088,131"}, {"label": "Bay Area Hispano Institute for Advancement", "type": "Agency", "total": 186541, "formatted": "$186,541"}, {"label": "Bay Area Outreach and Recreation Program", "type": "Agency", "total": 50592, "formatted": "$50,592"}, {"label": "Berkeley Art Center", "type": "Agency", "total": 77987, "formatted": "$77,987"}, {"label": "Berkeley Community Gardening Collaborative", "type": "Agency", "total": 19720, "formatted": "$19,720"}, {"label": "Berkeley Community Media", "type": "Agency", "total": 284710, "formatted": "$284,710"}, {"label": "Berkeley Community Scholars", "type": "Agency", "total": 35000, "formatted": "$35,000"}, {"label": "Berkeley Convention and Visitors Bureau", "type": "Agency", "total": 740277, "formatted": "$740,277"}, {"label": "Berkeley Film Foundation", "type": "Agency", "total": 22500, "formatted": "$22,500"}, {"label": "Berkeley Juneteenth", "type": "Agency", "total": 4500, "formatted": "$4,500"}, {"label": "Berkeley Public Schools Fund", "type": "Agency", "total": 25300, "formatted": "$25,300"}, {"label": "Berkeley Unified School District", "type": "Agency", "total": 586974, "formatted": "$586,974"}, {"label": "Berkeley Youth Alternatives", "type": "Agency", "total": 60000, "formatted": "$60,000"}, {"label": "Big Oaks Learning Center Inc", "type": "Agency", "total": 121197, "formatted": "$121,197"}, {"label": "Big Oaks Learning Center Inc.", "type": "Agency", "total": 39840, "formatted": "$39,840"}, {"label": "Biotech Partners", "type": "Agency", "total": 150000, "formatted": "$150,000"}, {"label": "Bread Project", "type": "Agency", "total": 70000, "formatted": "$70,000"}, {"label": "Building Opportunities for Self Sufficiency", "type": "Agency", "total": 1334724, "formatted": "$1,334,724"}, {"label": "CHDO Programs", "type": "Agency", "total": 28578, "formatted": "$28,578"}, {"label": "Center for Independent Living", "type": "Agency", "total": 211600, "formatted": "$211,600"}, {"label": "Civic Arts Grants - Arts Orgs and Individual Artist", "type": "Agency", "total": 450000, "formatted": "$450,000"}, {"label": "Civic Arts Grants - Festivals", "type": "Agency", "total": 142484, "formatted": "$142,484"}, {"label": "Community Agency Publishing Outcomes Project", "type": "Agency", "total": 25000, "formatted": "$25,000"}, {"label": "Dorothy Day", "type": "Agency", "total": 2677818, "formatted": "$2,677,818"}, {"label": "East Bay Community Law Center", "type": "Agency", "total": 48556, "formatted": "$48,556"}, {"label": "Easy Does It", "type": "Agency", "total": 1859288, "formatted": "$1,859,288"}, {"label": "Eden Council for Hope and Opportunity", "type": "Agency", "total": 35000, "formatted": "$35,000"}, {"label": "Eviction Defense Center", "type": "Agency", "total": 797139, "formatted": "$797,139"}, {"label": "Family Violence Law Center", "type": "Agency", "total": 75000, "formatted": "$75,000"}, {"label": "HHCS Public Facility Improvements NOFA", "type": "Agency", "total": 1053918, "formatted": "$1,053,918"}, {"label": "HMIS Support", "type": "Agency", "total": 6676, "formatted": "$6,676"}, {"label": "Healthy Black Families", "type": "Agency", "total": 150000, "formatted": "$150,000"}, {"label": "Healthy Black Families, Inc.", "type": "Agency", "total": 90000, "formatted": "$90,000"}, {"label": "Insight Housing", "type": "Agency", "total": 2415102, "formatted": "$2,415,102"}, {"label": "Inter-City Services", "type": "Agency", "total": 101351, "formatted": "$101,351"}, {"label": "J-Sei", "type": "Agency", "total": 30000, "formatted": "$30,000"}, {"label": "Larkin Street Youth Services", "type": "Agency", "total": 189255, "formatted": "$189,255"}, {"label": "Lifelong Medical Care", "type": "Agency", "total": 1157071, "formatted": "$1,157,071"}, {"label": "Multicultural Institute", "type": "Agency", "total": 132500, "formatted": "$132,500"}, {"label": "Nia House Learning Center", "type": "Agency", "total": 100000, "formatted": "$100,000"}, {"label": "Peer Wellness Collective", "type": "Agency", "total": 32016, "formatted": "$32,016"}, {"label": "RISE Program", "type": "Agency", "total": 229328, "formatted": "$229,328"}, {"label": "Rebuilding Together East Bay - North", "type": "Agency", "total": 114164, "formatted": "$114,164"}, {"label": "Rebuilding Together East Bay- North", "type": "Agency", "total": 93780, "formatted": "$93,780"}, {"label": "Stiles Hall", "type": "Agency", "total": 100000, "formatted": "$100,000"}, {"label": "Sugar - Sweetened Beverage Panel (POE)**", "type": "Agency", "total": 452646, "formatted": "$452,646"}, {"label": "Telegraph Business Improvement District", "type": "Agency", "total": 49139, "formatted": "$49,139"}, {"label": "Through the Looking Glass", "type": "Agency", "total": 35000, "formatted": "$35,000"}, {"label": "UC Berkeley", "type": "Agency", "total": 140000, "formatted": "$140,000"}, {"label": "UC Theater Concert Career Pathways Program", "type": "Agency", "total": 45000, "formatted": "$45,000"}, {"label": "Women's Daytime Drop-In Center", "type": "Agency", "total": 267071, "formatted": "$267,071"}];
+const labels = ["CDBG*", "CSBG*", "ESG*", "GF Measure P", "GF Measure U1", "General Fund (GF)", "HOME*", "HOME-ARP", "MHSA", "Other funds", "PLHA", "Arts", "Childcare", "Community Facilities Improvements", "Community Media", "Disability Programs", "Economic Development", "Employment Training", "Health", "Homeless Services", "Housing", "Housing Development & Rehabilitation", "Legal/Advocacy", "Other", "Recreation", "Seniors", "Youth", "Alameda County Homeless Action Center", "BANANAS Incorporated", "Bay Area Community Land Trust", "Bay Area Community Services", "Bay Area Hispano Institute for Advancement", "Bay Area Outreach and Recreation Program", "Berkeley Art Center", "Berkeley Community Gardening Collaborative", "Berkeley Community Media", "Berkeley Community Scholars", "Berkeley Convention and Visitors Bureau", "Berkeley Film Foundation", "Berkeley Juneteenth", "Berkeley Public Schools Fund", "Berkeley Unified School District", "Berkeley Youth Alternatives", "Big Oaks Learning Center Inc", "Big Oaks Learning Center Inc.", "Biotech Partners", "Bread Project", "Building Opportunities for Self Sufficiency", "CHDO Programs", "Center for Independent Living", "Civic Arts Grants - Arts Orgs and Individual Artist", "Civic Arts Grants - Festivals", "Community Agency Publishing Outcomes Project", "Dorothy Day", "East Bay Community Law Center", "Easy Does It", "Eden Council for Hope and Opportunity", "Eviction Defense Center", "Family Violence Law Center", "HHCS Public Facility Improvements NOFA", "HMIS Support", "Healthy Black Families", "Healthy Black Families, Inc.", "Insight Housing", "Inter-City Services", "J-Sei", "Larkin Street Youth Services", "Lifelong Medical Care", "Multicultural Institute", "Nia House Learning Center", "Peer Wellness Collective", "RISE Program", "Rebuilding Together East Bay - North", "Rebuilding Together East Bay- North", "Stiles Hall", "Sugar - Sweetened Beverage Panel (POE)**", "Telegraph Business Improvement District", "Through the Looking Glass", "UC Berkeley", "UC Theater Concert Career Pathways Program", "Women's Daytime Drop-In Center"];
+const gd = document.getElementById('chart');
+const info = document.getElementById('info');
+function esc(x) {
+  return String(x ?? '').replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+}
+function fmtMoney(v) {
+  return '$' + Number(v || 0).toLocaleString('en-US', {maximumFractionDigits: 0});
+}
+function fmtPct(n, d) {
+  if (!d || !Number.isFinite(Number(n)) || !Number.isFinite(Number(d))) return 'n/a';
+  return (Number(n) / Number(d) * 100).toLocaleString('en-US', {maximumFractionDigits: 1}) + '%';
+}
+function categoryLinksForNode(nodeIndex) {
+  const links = [];
+  const sources = data[0].link.source;
+  const targets = data[0].link.target;
+  const values = data[0].link.value;
+  for (let i = 0; i < values.length; i++) {
+    const s = sources[i];
+    const t = targets[i];
+    const sm = nodeMeta[s];
+    const tm = nodeMeta[t];
+    if (t === nodeIndex && sm && sm.type === 'Category') {
+      links.push({category: sm, amount: values[i], direction: 'incoming'});
+    } else if (s === nodeIndex && tm && tm.type === 'Category') {
+      links.push({category: tm, amount: values[i], direction: 'outgoing'});
+    }
+  }
+  return links;
+}
+function renderInfo(pointNumber) {
+  const m = nodeMeta[pointNumber];
+  if (!m) return;
+  let extra = '<div class="hint">This is the total FY27 allocation represented by this node.</div>';
+  if (m.type === 'Agency') {
+    const categoryLinks = categoryLinksForNode(pointNumber);
+    if (categoryLinks.length === 1) {
+      const c = categoryLinks[0].category;
+      extra += `<div class="hint"><strong>Percent of ${esc(c.label)}:</strong> ${fmtPct(categoryLinks[0].amount, c.total)}</div>`;
+    } else if (categoryLinks.length > 1) {
+      extra += '<div class="hint"><strong>Percent of category total:</strong></div><ul>' + categoryLinks.map(l => `<li>${esc(l.category.label)}: ${fmtPct(l.amount, l.category.total)}</li>`).join('') + '</ul>';
+    }
+  } else if (m.type === 'Category') {
+    const allCategoryTotal = nodeMeta.filter(x => x.type === 'Category').reduce((sum, x) => sum + Number(x.total || 0), 0);
+    extra += `<div class="hint"><strong>Percent of all visualized community agency allocations:</strong> ${fmtPct(m.total, allCategoryTotal)}</div>`;
+  }
+  info.innerHTML = `<h2>${esc(m.label)}</h2><div class="type">${esc(m.type)}</div><div class="total">${esc(m.formatted)}</div>${extra}`;
+}
+function renderInfoByLabel(label) {
+  const i = labels.indexOf(label);
+  if (i >= 0) renderInfo(i);
+}
+function endpointIndex(endpoint, fallbackIndex) {
+  if (typeof endpoint === 'number') return endpoint;
+  if (endpoint && typeof endpoint.pointNumber === 'number') return endpoint.pointNumber;
+  if (endpoint && typeof endpoint.index === 'number') return endpoint.index;
+  if (endpoint && endpoint.label) return labels.indexOf(endpoint.label);
+  return fallbackIndex;
+}
+function endpointLabel(endpoint, fallbackIndex) {
+  if (endpoint && endpoint.label) return endpoint.label;
+  const idx = endpointIndex(endpoint, fallbackIndex);
+  return labels[idx] || '';
+}
+function renderLinkInfo(linkIndex, point) {
+  const sourceIdx = endpointIndex(point && point.source, data[0].link.source[linkIndex]);
+  const targetIdx = endpointIndex(point && point.target, data[0].link.target[linkIndex]);
+  const sourceLabel = endpointLabel(point && point.source, sourceIdx);
+  const targetLabel = endpointLabel(point && point.target, targetIdx);
+  const value = (point && typeof point.value === 'number') ? point.value : data[0].link.value[linkIndex];
+  const sourceMeta = nodeMeta[sourceIdx];
+  const targetMeta = nodeMeta[targetIdx];
+  const categoryMeta = sourceMeta && sourceMeta.type === 'Category' ? sourceMeta : (targetMeta && targetMeta.type === 'Category' ? targetMeta : null);
+  const categoryPctLine = categoryMeta ? `<div class="hint"><strong>Percent of ${esc(categoryMeta.label)}:</strong> ${fmtPct(value, categoryMeta.total)}</div>` : '';
+  info.innerHTML = `
+    <h2>${esc(sourceLabel)} → ${esc(targetLabel)}</h2>
+    <div class="type">Flow/link</div>
+    <div class="total">${fmtMoney(value)}</div>
+    <div class="hint">This is the FY27 allocation for this specific flow.</div>
+    ${categoryPctLine}
+    <div class="hint"><strong>Source total:</strong> ${sourceMeta ? esc(sourceMeta.formatted) : 'n/a'}</div>
+    <div class="hint"><strong>Target total:</strong> ${targetMeta ? esc(targetMeta.formatted) : 'n/a'}</div>`;
+}
+function handleSankeyPoint(p) {
+  if (!p) return;
+  // Sankey link events include source and target endpoint objects. Node events include a label.
+  if (p.source !== undefined && p.target !== undefined && typeof p.pointNumber === 'number') {
+    renderLinkInfo(p.pointNumber, p);
+    return;
+  }
+  if (p.label && labels.includes(p.label)) {
+    renderInfo(labels.indexOf(p.label));
+    return;
+  }
+  if (typeof p.pointNumber === 'number' && p.pointNumber < nodeMeta.length) renderInfo(p.pointNumber);
+}
+Plotly.newPlot(gd, data, layout, config).then(() => {
+  const ro = new ResizeObserver(() => Plotly.Plots.resize(gd));
+  ro.observe(document.getElementById('wrap'));
+  window.addEventListener('resize', () => Plotly.Plots.resize(gd));
+  gd.on('plotly_hover', ev => handleSankeyPoint(ev.points && ev.points[0]));
+  gd.on('plotly_click', ev => handleSankeyPoint(ev.points && ev.points[0]));
+  document.querySelectorAll('.catbtn').forEach(btn => btn.addEventListener('click', e => renderInfoByLabel(e.target.dataset.label)));
+});
+</script>
+</body>
+</html>
